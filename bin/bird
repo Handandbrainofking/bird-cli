@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+
+process.env.NODE_PATH = __dirname + '/../node_modules'
+
+const { resolve } = require('path')
+const res = command => resolve(__dirname, '../commands', command)
+
+const program = require('commander')
+program
+    .version(require('../package').version)
+program
+    .usage('<command>')
+
+
+program
+    .command('add')
+    .description('add a template by yourself')
+    .alias('a')
+    .action(() => {
+        require(res('add'))
+    })
+
+program
+    .command('list')
+    .description('list all the templates')
+    .alias('l')
+    .action(() => {
+        console.log('list callback')
+        require(res('list'))
+    })
+
+program
+    .command('init')
+    .description('Generate a new Project with template')
+    .alias('i')
+    .action(() => {
+        require(res('init'))
+    })
+
+program
+    .command('create')
+    .description('create project by specific template')
+    .alias('create')
+    .action(() => {
+        require(res('create'))
+    })
+
+    program.parse(process.argv)
+    if(!program.args.length) {
+        program.help()
+    }
+// console.log('*********program******',program)
+// console.log('开始愉快的coding-1---');
+

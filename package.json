@@ -1,0 +1,24 @@
+{
+  "name": "bird",
+  "version": "0.0.1",
+  "description": "bird-cli 一款搭建weex项目的脚手架",
+  "main": "index.js",
+  "bin": {
+    "bird": "bin/bird"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nick",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "cli-table": "^0.3.1",
+    "commander": "^2.9.0",
+    "download-git-repo": "^1.0.0",
+    "handlebars": "^4.1.2",
+    "inquirer": "^3.0.6",
+    "metalsmith": "^2.3.0",
+    "ora": "^1.2.0"
+  }
+}
