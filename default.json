@@ -1,0 +1,12 @@
+[
+    {
+        "name": "common",
+        "value": "Handandbrainofking/dol-cli-common-template",
+        "short": "common"
+    },
+    {
+        "name": "base",
+        "value": "tj/commander.js",
+        "short": "base"
+    }
+]

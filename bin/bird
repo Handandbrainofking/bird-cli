@@ -39,7 +39,8 @@ program
 
 program
     .command('create')
-    .description('create project by specific template')
+    .option('-t, --project-name <template>', 'project name')
+    .description('create project by common template')
     .alias('create')
     .action(() => {
         require(res('create'))

@@ -1,0 +1,1 @@
+# dol-cli-common-template
