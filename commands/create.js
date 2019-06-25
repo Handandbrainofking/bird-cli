@@ -1,8 +1,15 @@
-const { prompt } = require('inquirer')
+const {
+    prompt
+} = require('inquirer')
 const program = require('commander')
-const { writeFile } = require('fs')
-const { listTable } = require(`${__dirname}/../utils`)
-const { resolve } = require('path')
+
+const fs = require('fs')
+const {
+    listTable
+} = require(`${__dirname}/../utils`)
+const {
+    resolve
+} = require('path')
 
 const chalk = require('chalk')
 const download = require('download-git-repo')
@@ -13,9 +20,7 @@ const option = program.parse(process.argv).args[0]
 const defaultName = typeof option === 'string' ? option : 'weex-demo-project'
 let tplList = require(`${__dirname}/../templates`)
 let defaultList = require(`${__dirname}/../default`)
-console.log('tplist',tplList)
-const question = [
-    {
+const question = [{
         type: 'input',
         name: 'name',
         message: 'Project name:',
@@ -36,7 +41,7 @@ const question = [
         name: 'template',
         message: 'Project choice?',
         choices: defaultList,
-        default: defaultList['inquirer'],
+        default: defaultList[0],
         validate(val) {
             return true
         },
@@ -50,7 +55,7 @@ const question = [
         message: 'version:',
         default: '0.0.1',
         validate(val) {
-            if(val !== '') {
+            if (val !== '') {
                 return true
             }
         }
@@ -65,39 +70,61 @@ const question = [
         type: 'input',
         name: 'author',
         message: 'author:'
-    },
-    {
-        type: 'input',
-        name: 'repository',
-        message: 'git repository:'
     }
 ]
 
 module.exports = prompt(question).then(({
-            name,
-            template,
-            version,
-            description,
-            author,
-            repository
-        }) => {
+    name,
+    template,
+    version,
+    description,
+    author,
+    repository
+}) => {
     console.log('name', chalk.magenta(name))
     console.log('template', chalk.cyan(template))
     console.log('version', chalk.blue(version))
     console.log('description', chalk.red(description))
     console.log('author', chalk.red(author))
-    console.log('repository', chalk.red(repository))
+    const projectName = name;
     const repoUrl = template
     const branch = 'master'
 
     const spinner = ora('Downloading, please wait……')
     spinner.start();
-    download(`${repoUrl}#${branch}`, `./${name}`, (err) => {
-        if(err) {
+    download(`${repoUrl}#${branch}`, `./${projectName}`, (err) => {
+        if (err) {
             console.log(chalk.red(err))
             process.exit()
         }
         spinner.stop()
-        console.log(chalk.green('New project has been initialized successfully!'))
+        fs.readFile(`./${projectName}/package.json`, 'utf8', function (err, data) {
+            if (err) {
+                spinner.stop();
+                console.error(err);
+                return;
+            }
+            const packageJson = JSON.parse(data);
+            packageJson.name = name;
+            packageJson.description = description;
+            packageJson.author = author;
+            var updatePackageJson = JSON.stringify(packageJson, null, 2);
+            fs.writeFile(`./${projectName}/package.json`, updatePackageJson, 'utf8', function (err) {
+                if (err) {
+                    spinner.stop();
+                    console.error(err);
+                    return;
+                } else {
+                    spinner.stop();
+                    console.log(chalk.green('New project has been initialized successfully!'))
+                    console.log(`
+                        ${chalk.bgWhite.black('   Run Application  ')}
+                        ${chalk.yellow(`cd ${name}`)}
+                        ${chalk.yellow('npm install')}
+                        ${chalk.yellow('npm start')}
+                    `);
+                }
+            });
+        });
     })
 })
