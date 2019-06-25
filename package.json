@@ -1,7 +1,7 @@
 {
-  "name": "bird",
+  "name": "dolphin-cli",
   "version": "0.0.1",
-  "description": "bird-cli 一款搭建weex项目的脚手架",
+  "description": "dolphin-cli 一款搭建weex项目的脚手架",
   "main": "index.js",
   "bin": {
     "dolphin": "bin/dolphin"
