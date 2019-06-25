@@ -5,8 +5,8 @@
         "short": "common"
     },
     {
-        "name": "base",
-        "value": "tj/commander.js",
-        "short": "base"
+        "name": "commom +eslint",
+        "value": "gitlab:git.midea.com:IT-MobileDivision/midea-weex-template.git",
+        "short": "c+e"
     }
 ]

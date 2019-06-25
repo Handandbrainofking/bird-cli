@@ -12,6 +12,14 @@ program
     .usage('<command>')
 
 program
+    .command('create')
+    .option('-t, --project-name <template>', 'project name')
+    .description('create project by common template')
+    .alias('c')
+    .action(() => {
+        require(res('create'))
+    })
+program
     .command('add')
     .description('add a template by yourself')
     .alias('a')
@@ -37,14 +45,14 @@ program
     })
 
 program
-    .command('create')
-    .option('-t, --project-name <template>', 'project name')
-    .description('create project by common template')
-    .alias('create')
+    .command('delete')
+    .description('delete a template which already added in configuration')
+    .alias('d')
     .action(() => {
-        require(res('create'))
+        require(res('delete'))
     })
 
+    
     program.parse(process.argv)
     if(!program.args.length) {
         program.help()

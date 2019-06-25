@@ -72,24 +72,16 @@ const question = [{
         message: 'author:'
     }
 ]
-
 module.exports = prompt(question).then(({
     name,
     template,
     version,
     description,
-    author,
-    repository
+    author
 }) => {
-    console.log('name', chalk.magenta(name))
-    console.log('template', chalk.cyan(template))
-    console.log('version', chalk.blue(version))
-    console.log('description', chalk.red(description))
-    console.log('author', chalk.red(author))
     const projectName = name;
     const repoUrl = template
     const branch = 'master'
-
     const spinner = ora('Downloading, please wait……')
     spinner.start();
     download(`${repoUrl}#${branch}`, `./${projectName}`, (err) => {
@@ -97,31 +89,30 @@ module.exports = prompt(question).then(({
             console.log(chalk.red(err))
             process.exit()
         }
-        spinner.stop()
         fs.readFile(`./${projectName}/package.json`, 'utf8', function (err, data) {
             if (err) {
-                spinner.stop();
-                console.error(err);
-                return;
+                spinner.stop()
+                console.error(err)
+                return
             }
-            const packageJson = JSON.parse(data);
-            packageJson.name = name;
-            packageJson.description = description;
-            packageJson.author = author;
-            var updatePackageJson = JSON.stringify(packageJson, null, 2);
+            const packageJson = JSON.parse(data)
+            packageJson.name = name
+            packageJson.description = description
+            packageJson.author = author
+            var updatePackageJson = JSON.stringify(packageJson, null, 2)
             fs.writeFile(`./${projectName}/package.json`, updatePackageJson, 'utf8', function (err) {
                 if (err) {
-                    spinner.stop();
-                    console.error(err);
-                    return;
+                    spinner.stop()
+                    console.error(`\n${err}`)
+                    return
                 } else {
-                    spinner.stop();
-                    console.log(chalk.green('New project has been initialized successfully!'))
+                    spinner.stop()
+                    console.log(chalk.green('New project has been created successfully!'))
                     console.log(`
                         ${chalk.bgWhite.black('   Run Application  ')}
                         ${chalk.yellow(`cd ${name}`)}
                         ${chalk.yellow('npm install')}
-                        ${chalk.yellow('npm start')}
+                        ${chalk.yellow('npm start or npm run dev')}
                     `);
                 }
             });

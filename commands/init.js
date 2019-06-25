@@ -1,9 +1,7 @@
 const {
     prompt
 } = require('inquirer')
-const {
-    writeFile
-} = require('fs')
+const fs = require('fs')
 const {
     listTable
 } = require(`${__dirname}/../utils`)
@@ -32,7 +30,7 @@ const question = [{
     },
     {
         type: 'input',
-        name: 'project',
+        name: 'projectName',
         message: 'Project name:',
         validate(val) {
             if (val !== '') {
@@ -50,27 +48,57 @@ const question = [{
         type: 'input',
         name: 'place',
         message: 'Where to init the project:',
-        default: './news'
+        default: './'
     }
 ]
 
 module.exports = prompt(question).then(({
     name,
-    project,
+    projectName,
     author,
     place
 }) => {
-    const spinner = ora('Downloading template...')
-    const repoUrl = 'SBoudrias/Inquirer.js'
-    const branch = 'master'
+    console.log(chalk.green(name))
+    console.log(chalk.green(projectName))
+    console.log(chalk.green(author))
+    console.log(chalk.green(place))
+    const spinner = ora('Downloading, please wait...')
+    const repoUrl = tplList[name]['owner/name']
+    const gitBranch = tplList[name]['branch']
     spinner.start()
-    download(`${repoUrl}#${branch}`, `${place}/${project}`, (err) => {
+    console.log('repo',repoUrl)
+    download(`${repoUrl}#${gitBranch}`, `${place}/${projectName}`, (err) => {
         if(err) {
             console.log(chalk.red(err))
             process.exit()
         }
-        spinner.stop()
-        console.log(chalk.green('New project has been initialized successfully!'))
+        fs.readFile(`./${place}/${projectName}/package.json`, 'utf8', function (err, data) {
+            if(err) {
+                spinner.stop()
+                console.error(err)
+                return
+            }
+            const packageJson = JSON.parse(data)
+            packageJson.name = name
+            packageJson.author = author
+            var updatePackageJson = JSON.stringify(packageJson, null , 2)
+            fs.writeFile(`./${place}/${projectName}/package.json`, updatePackageJson, 'utf-8', function(err) {
+                if(err) {
+                    spinner.stop()
+                    console.error(`\n${err}`)
+                    return
+                } else {
+                    spinner.stop()
+                    console.log(chalk.green(`New Project has been initialized by ${name} successfully!`))
+                    console.log(`
+                        ${chalk.bgWhite.black('   Run Application  ')}
+                        ${chalk.yellow(`cd ${projectName}`)}
+                        ${chalk.yellow('npm install')}
+                        ${chalk.yellow('npm start or npm run dev')}
+                    `);
+                }
+            } )
+        })
     })
 }).catch((error) => {
     console.log(chalk.red(error))

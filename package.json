@@ -4,7 +4,7 @@
   "description": "bird-cli 一款搭建weex项目的脚手架",
   "main": "index.js",
   "bin": {
-    "bird": "bin/bird"
+    "dolphin": "bin/dolphin"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

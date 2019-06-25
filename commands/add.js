@@ -19,7 +19,7 @@ const question = [{
             if (tplList[val]) {
                 return 'Template is exited! please change and try again .'
             } else if (val === '') {
-                return 'Name if required!'
+                return 'Name is required!'
             } else {
                 return true
             }
