@@ -16,7 +16,7 @@
     "cli-table": "^0.3.1",
     "commander": "^2.9.0",
     "download-git-repo": "^1.0.0",
-    "handlebars": "^4.1.2",
+    "handlebars": "^4.5.3",
     "inquirer": "^3.0.6",
     "metalsmith": "^2.3.0",
     "ora": "^1.2.0"
